@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.whoisparis</groupId>
     <artifactId>yourcryptobot</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>yourcryptobot</name>
     <description>yourcryptobot</description>
     <properties>
@@ -54,6 +54,11 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.10.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

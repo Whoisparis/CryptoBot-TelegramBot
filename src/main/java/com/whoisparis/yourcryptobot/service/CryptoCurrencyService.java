@@ -1,18 +1,34 @@
-package service;
+package com.whoisparis.yourcryptobot.service;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.whoisparis.yourcryptobot.Config.CryptoConfig;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-
+@Component
+@Service
 public class CryptoCurrencyService {
+
+    protected final CryptoConfig cryptoConfig;
+
+    public CryptoCurrencyService(CryptoConfig cryptoConfig) {
+        this.cryptoConfig = cryptoConfig;
+    }
+
+    public String getApiKey() {
+        return cryptoConfig.getApiKey();
+    }
+
     private Integer btcPrice;
     private Double ticketPrice;
-    private String apiKey = "0738baf7-b707-446b-9336-f8cf853a1dda";
+
 
     public Integer getBtcPrice() {
         return btcPrice;
@@ -23,13 +39,13 @@ public class CryptoCurrencyService {
 
         HttpUrl.Builder urlBuilder = HttpUrl.parse("https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest")
                 .newBuilder();
-        urlBuilder.addQueryParameter("symbol", "btc");
+        urlBuilder.addQueryParameter("symbol", "BTC");
 
         String url = urlBuilder.build().toString();
 
         Request request = new Request.Builder()
                 .url(url)
-                .addHeader("X-CMC_PRO_API_KEY", apiKey)
+                .addHeader("X-CMC_PRO_API_KEY", getApiKey())
                 .addHeader("Accept", "application/json")
                 .build();
 
@@ -58,13 +74,13 @@ public class CryptoCurrencyService {
 
         HttpUrl.Builder urlBuilder = HttpUrl.parse("https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest")
                 .newBuilder();
-        urlBuilder.addQueryParameter("symbol", "ticket");
+        urlBuilder.addQueryParameter("symbol", ticket);
 
         String url = urlBuilder.build().toString();
 
         Request request = new Request.Builder()
                 .url(url)
-                .addHeader("X-CMC_PRO_API_KEY", apiKey)
+                .addHeader("X-CMC_PRO_API_KEY", getApiKey())
                 .addHeader("Accept", "application/json")
                 .build();
 
@@ -75,13 +91,13 @@ public class CryptoCurrencyService {
             Gson gson = new Gson();
             JsonParser parser = new JsonParser();
             JsonObject jsonObject = parser.parse(responseBody).getAsJsonObject();
-            Double cryptoPrice = jsonObject.get("data").getAsJsonObject()
-                    .get("ticket").getAsJsonObject()
+            Double ticketValue = jsonObject.get("data").getAsJsonObject()
+                    .get(ticket).getAsJsonObject()
                     .get("quote").getAsJsonObject()
                     .get("USD").getAsJsonObject()
                     .get("price").getAsDouble();
 
-            ticketPrice = cryptoPrice;
+            ticketPrice = ticketValue;
 
         } catch (Exception e) {
             e.printStackTrace();
